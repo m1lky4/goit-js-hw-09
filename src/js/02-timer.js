@@ -17,7 +17,7 @@ startBtn.addEventListener('click', () => {
     seconds.innerHTML = addLeadingZero(date.seconds);
 
     startBtn.setAttribute('disabled', '');
-    
+
     let interval = setInterval(() => {
 
     if (seconds.innerHTML > 0) {
@@ -47,7 +47,7 @@ startBtn.addEventListener('click', () => {
         clearInterval(interval);
         }
         
-    }, 100);
+    }, 1000);
 });
     
 const options = {
