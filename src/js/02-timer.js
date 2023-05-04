@@ -16,6 +16,8 @@ startBtn.addEventListener('click', () => {
     minutes.innerHTML = addLeadingZero(date.minutes);
     seconds.innerHTML = addLeadingZero(date.seconds);
 
+    startBtn.setAttribute('disabled', '');
+    
     let interval = setInterval(() => {
 
     if (seconds.innerHTML > 0) {
