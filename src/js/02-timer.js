@@ -45,7 +45,7 @@ startBtn.addEventListener('click', () => {
         clearInterval(interval);
         }
         
-    }, 1000);
+    }, 100);
 });
     
 const options = {
