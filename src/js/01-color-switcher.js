@@ -1,22 +1,22 @@
 const body = document.querySelector('body');
-const start = document.querySelector('[data-start]');
-const stop = document.querySelector('[data-stop]');
+const startBtn = document.querySelector('[data-start]');
+const stopBtn = document.querySelector('[data-stop]');
 
-let randomColor;
+let intervalId;
 
-start.addEventListener('click', () => {
-   randomColor = setInterval(() => {
+startBtn.addEventListener('click', () => {
+   intervalId = setInterval(() => {
 body.style.backgroundColor = getRandomHexColor();
     },1000);
-    start.setAttribute('disabled', '');
-    stop.removeAttribute('disabled');
+  startBtn.disabled = false;
+  stopBtn.disabled = true;
 });
 
 
-stop.addEventListener('click', () => {
+stopBtn.addEventListener('click', () => {
     clearInterval(randomColor);
-    stop.setAttribute('disabled', '');
-    start.removeAttribute('disabled');
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
 });
 
 function getRandomHexColor() {

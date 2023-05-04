@@ -11,25 +11,27 @@ btn.addEventListener('click', (e) => {
   e.preventDefault();
   for (let i = 1; i <= amount.value; i++) {
     const delay = i === 1 ? Number(firstDelay.value) : Number(firstDelay.value) + (i - 1) * Number(step.value);
-    createPromise(i, delay);
+    createPromise(i, delay).then(value => {
+        Notiflix.Notify.success(value);
+      }).catch(err => {
+        Notiflix.Notify.failure(err);
+      });
   }
 })
 
 function createPromise(position, delay) {
   const shouldResolve = Math.random() > 0.3;
-  setTimeout(() => {
-    if (shouldResolve) {
-      new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
+
+    setTimeout(() => {
+      if (shouldResolve) {
+      
         resolve(`✅ Fulfilled promise ${position} in ${delay}ms`);
-      }).then(value => {
-        Notiflix.Notify.success(value);
-      })
-    } else {
-      new Promise((resolve, reject) => {
+      } else {
+     
         reject(`❌ Rejected promise ${position} in ${delay}ms`);
-      }).catch(err => {
-        Notiflix.Notify.failure(err);
-      });
-    }
-  }, delay);
+      }
+    
+    }, delay);
+  });
 }

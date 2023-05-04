@@ -1,6 +1,8 @@
 import flatpickr from "flatpickr";
 import Notiflix from 'notiflix';
 
+let selectedDateMs = null;
+
 const inputDate = document.querySelector('#datetime-picker');
 const startBtn = document.querySelector('[data-start]');
 const days = document.querySelector('[data-days]');
@@ -8,15 +10,15 @@ const hours = document.querySelector('[data-hours]');
 const minutes = document.querySelector('[data-minutes]');
 const seconds = document.querySelector('[data-seconds]');
 
-startBtn.setAttribute('disabled', '');
+startBtn.disabled = true;
 startBtn.addEventListener('click', () => {
-    const date = JSON.parse(localStorage.getItem('dateTime'));
+    const date = selectedDateMs;
     days.innerHTML = addLeadingZero(date.days);
     hours.innerHTML = addLeadingZero(date.hours);
     minutes.innerHTML = addLeadingZero(date.minutes);
     seconds.innerHTML = addLeadingZero(date.seconds);
 
-    startBtn.setAttribute('disabled', '');
+    startBtn.disabled = true;
 
     let interval = setInterval(() => {
 
@@ -27,13 +29,13 @@ startBtn.addEventListener('click', () => {
         }      
     } else if (minutes.innerHTML > 0) {
         minutes.innerHTML -= 1;
-        seconds.innerHTML = '60';
+        seconds.innerHTML = '59';
         if (minutes.innerHTML < 10) {
             minutes.innerHTML = addLeadingZero(minutes.innerHTML);
         } 
     } else if (hours.innerHTML > 0) {
         hours.innerHTML -= 1;
-        minutes.innerHTML = '60';
+        minutes.innerHTML = '59';
         if (hours.innerHTML < 10) {
             hours.innerHTML = addLeadingZero(hours.innerHTML);
         }
@@ -59,10 +61,8 @@ const options = {
         if (options.defaultDate.getTime() > selectedDates[0].getTime()) {
             Notiflix.Notify.failure('Please choose a date in the future');
         } else {
-            startBtn.removeAttribute('disabled');
-            let difference = convertMs(selectedDates[0].getTime() - options.defaultDate.getTime());
-            localStorage.setItem('dateTime', JSON.stringify(difference));
-    
+            startBtn.disabled = false;
+            selectedDateMs = convertMs(selectedDates[0].getTime() - options.defaultDate.getTime());
         }
         
     },
@@ -88,5 +88,5 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
  function addLeadingZero(value) {
-         return value = value.toString().padStart(2, '0');
+     return value.toString().padStart(2, '0');
 };
