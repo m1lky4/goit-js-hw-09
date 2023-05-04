@@ -10,8 +10,44 @@ const seconds = document.querySelector('[data-seconds]');
 
 startBtn.setAttribute('disabled', '');
 startBtn.addEventListener('click', () => {
+    const date = JSON.parse(localStorage.getItem('dateTime'));
+    days.innerHTML = addLeadingZero(date.days);
+    hours.innerHTML = addLeadingZero(date.hours);
+    minutes.innerHTML = addLeadingZero(date.minutes);
+    seconds.innerHTML = addLeadingZero(date.seconds);
 
+    let interval = setInterval(() => {
+
+    if (seconds.innerHTML > 0) {
+        seconds.innerHTML -= 1;
+        if (seconds.innerHTML < 10) {
+            seconds.innerHTML = addLeadingZero(seconds.innerHTML);
+        }      
+    } else if (minutes.innerHTML > 0) {
+        minutes.innerHTML -= 1;
+        seconds.innerHTML = '60';
+        if (minutes.innerHTML < 10) {
+            minutes.innerHTML = addLeadingZero(minutes.innerHTML);
+        } 
+    } else if (hours.innerHTML > 0) {
+        hours.innerHTML -= 1;
+        minutes.innerHTML = '60';
+        if (hours.innerHTML < 10) {
+            hours.innerHTML = addLeadingZero(hours.innerHTML);
+        }
+    } else if (days.innerHTML > 0) {
+            days.innerHTML -= 1;
+        hours.innerHTML = '23';
+        if (days.innerHTML < 10) {
+            days.innerHTML = addLeadingZero(days.innerHTML);
+        }
+    } else {
+        clearInterval(interval);
+        }
+        
+    }, 1000);
 });
+    
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -22,15 +58,9 @@ const options = {
             Notiflix.Notify.failure('Please choose a date in the future');
         } else {
             startBtn.removeAttribute('disabled');
-            let newDate = convertMs(selectedDates[0].getTime() - options.defaultDate.getTime());
-            addLeadingZero(newDate);
+            let difference = convertMs(selectedDates[0].getTime() - options.defaultDate.getTime());
+            localStorage.setItem('dateTime', JSON.stringify(difference));
     
-        }
-        function addLeadingZero(value) {
-            value.days = value.days.toString().padStart(2, '0');
-            value.hours = value.hours.toString().padStart(2, '0');
-            value.minutes = value.minutes.toString().padStart(2, '0');
-            value.seconds = value.seconds.toString().padStart(2, '0');
         }
         
     },
@@ -55,3 +85,6 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
+ function addLeadingZero(value) {
+         return value = value.toString().padStart(2, '0');
+};
